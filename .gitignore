@@ -135,3 +135,6 @@ dmypy.json
 pages.txt
 
 savefiles/
+
+config.ini
+.vscode
