@@ -1,13 +1,7 @@
-# Webページの一括キャプチャ
+# WebPages Capture
 
-- CSVにキャプチャしたいWebページを羅列し、自動ですべてをキャプチャ保存する。
+- List the web pages you want to capture in CSV, and automatically capture and save everything.
 
-## CSVの記述方法
+## CSV description method
 
-- 1行1URLとする
-
-## TODO
-
-- まだスクロールがある、ページ全体のキャプチャができてない
-- 日付事のフォルダを作りたい
-
+- 1 line 1 URL
