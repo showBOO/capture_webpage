@@ -15,7 +15,7 @@ def main():
     savepath = savetop + '/' + tdatetime.strftime('%Y/%m/%d')+'/'
     os.makedirs(savepath, exist_ok=True)
 
-    # Webdriver用オプション
+    # Webdriver options
     options = webdriver.ChromeOptions()
 
     # headless
@@ -26,23 +26,24 @@ def main():
     options.add_argument("--disable-gpu")
     options.add_argument("--no-sandbox")
 
-    driver = webdriver.Chrome("C:\\webdriver\\chromedriver.exe", options=options)
+    driver = webdriver.Chrome(
+        "C:\\webdriver\\chromedriver.exe", options=options)
 
     with open('pages.txt') as f:
         pages = f.readlines()
 
-
     for page in pages:
 
         driver.get(page)
-        #print(page)
         time.sleep(3)
-        #w = driver.execute_script("return document.body.scrollWidth;")
+        # w = driver.execute_script("return document.body.scrollWidth;")
         h = driver.execute_script("return document.body.scrollHeight;")
         driver.set_window_size(1920, h)
 
+        # remove unnecessary line breaks
         fname = str(page).strip()
-        fname = fname.replace('/', '_').replace(':','_')
+        # Remove characters that cannot be used in file names
+        fname = fname.replace('/', '_').replace(':', '_').replace('?', '')
 
         driver.save_screenshot(savepath + fname + '.png')
 
