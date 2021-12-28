@@ -1,2 +1,5 @@
 [savetop]
 dir = ./savedir
+
+[func]
+is_del = True
