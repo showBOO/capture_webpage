@@ -3,7 +3,8 @@ import time
 from selenium import webdriver
 import configparser
 from datetime import datetime as dt
-
+import glob
+from PIL import Image
 
 def main():
 
@@ -49,6 +50,16 @@ def main():
 
     driver.quit()
 
+    # convert png to jpeg
+    pngpath_list = glob.glob(savepath + '/*.png')  # get filelist of png files
+    for pngpath in pngpath_list:
+        basename = os.path.basename(pngpath)  # get filename
+        save_filepath = savepath + basename[:-4] + '.jpg'  # determin save filename
+        img = Image.open(pngpath)
+        img = img.convert('RGB')  # convert PNG to jpeg
+        img.save(save_filepath, "JPEG", quality=80)     # jpeg parameter settings
+        if inifile['func']['is_del']:
+            os.remove(pngpath)              # save as jpeg
 
 if __name__ == '__main__':
     main()
