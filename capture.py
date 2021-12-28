@@ -1,6 +1,7 @@
 import os
 import time
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 import configparser
 from datetime import datetime as dt
 import glob
@@ -27,8 +28,7 @@ def main():
     options.add_argument("--disable-gpu")
     options.add_argument("--no-sandbox")
 
-    driver = webdriver.Chrome(
-        "C:\\webdriver\\chromedriver.exe", options=options)
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
     with open('pages.txt') as f:
         pages = f.readlines()
