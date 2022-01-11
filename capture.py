@@ -10,8 +10,9 @@ from PIL import Image
 def main():
 
     inifile = configparser.ConfigParser()
-    inifile.read('./config.ini', 'UTF-8')
-
+    #print(os.path.dirname(__file__))
+    inifile.read(os.path.dirname(__file__)+'./config.ini', 'UTF-8')
+    
     savetop = inifile['savetop']['dir']
     tdatetime = dt.now()
     savepath = savetop + '/' + tdatetime.strftime('%Y/%m/%d')+'/'
