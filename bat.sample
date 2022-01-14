@@ -1,0 +1,7 @@
+rem Move to the folder that contains the .py file you want to run
+cd C:\Users
+rem Launching a virtual environment
+call C:\Users\ path to \Scripts\activate.bat
+call activate (venv name)
+rem execute pythonfile
+python test.py
