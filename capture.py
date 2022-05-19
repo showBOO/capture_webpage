@@ -36,7 +36,7 @@ def main():
     options.add_argument('--ignore-ssl-errors')
     prefs = {"profile.default_content_setting_values.notifications": 2}
 
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options, service_log_path=savepath+"stdout.log")
 
     with open('pages.txt') as f:
         pages = f.readlines()
