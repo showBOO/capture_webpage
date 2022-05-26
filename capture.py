@@ -49,6 +49,9 @@ def main():
 
     for page in pages:
 
+        # adding set_page_load_timeout
+        driver.set_page_load_timeout(20)
+        
         driver.get(page)
         time.sleep(3)
         # w = driver.execute_script("return document.body.scrollWidth;")
