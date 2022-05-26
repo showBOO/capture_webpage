@@ -6,6 +6,9 @@ import configparser
 from datetime import datetime as dt
 import glob
 from PIL import Image
+import logging
+from selenium.webdriver.remote.remote_connection import LOGGER
+
 
 def main():
 
@@ -19,6 +22,9 @@ def main():
     savepath = savetop + '/' + tdatetime.strftime('%Y/%m/%d')+'/'
     os.makedirs(savepath, exist_ok=True)
 
+    # logging setup
+    logging.basicConfig(filename=savepath + 'debug.log', level=logging.DEBUG)
+    
     # Webdriver options
     options = webdriver.ChromeOptions()
 
@@ -36,7 +42,7 @@ def main():
     options.add_argument('--ignore-ssl-errors')
     prefs = {"profile.default_content_setting_values.notifications": 2}
 
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options, service_log_path=savepath+"stdout.log")
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 
     with open('pages.txt') as f:
         pages = f.readlines()
