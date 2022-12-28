@@ -2,6 +2,8 @@ import os
 import time
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.common.exceptions import TimeoutException
+import traceback
 import configparser
 from datetime import datetime as dt
 import glob
@@ -15,7 +17,7 @@ def main():
     # reading configuration file
     inifile = configparser.ConfigParser()
     inifile.read(os.path.dirname(__file__)+'./config.ini', 'UTF-8')
-    
+
     # determin the save directory
     savetop = inifile['savetop']['dir']
     tdatetime = dt.now()
@@ -24,7 +26,7 @@ def main():
 
     # logging setup
     logging.basicConfig(filename=savepath + 'debug.log', level=logging.DEBUG)
-    
+
     # Webdriver options
     options = webdriver.ChromeOptions()
 
@@ -51,19 +53,29 @@ def main():
 
         # adding set_page_load_timeout
         driver.set_page_load_timeout(20)
-        
-        driver.get(page)
-        time.sleep(3)
-        # w = driver.execute_script("return document.body.scrollWidth;")
-        h = driver.execute_script("return document.body.scrollHeight;")
-        driver.set_window_size(1920, h)
 
-        # remove unnecessary line breaks
-        fname = str(page).strip()
-        # Remove characters that cannot be used in file names
-        fname = fname.replace('/', '_').replace(':', '_').replace('?', '')
+        print(page)
 
-        driver.save_screenshot(savepath + fname + '.png')
+        try:
+
+            driver.get(page)
+            time.sleep(3)
+            # w = driver.execute_script("return document.body.scrollWidth;")
+            h = driver.execute_script("return document.body.scrollHeight;")
+            driver.set_window_size(1920, h)
+
+            # remove unnecessary line breaks
+            fname = str(page).strip()
+            # Remove characters that cannot be used in file names
+            fname = fname.replace('/', '_').replace(':', '_').replace('?', '')
+
+            driver.save_screenshot(savepath + fname + '.png')
+
+        except TimeoutException as e:
+            print("TimeoutException")
+
+        except Exception as e:
+            print(traceback.format_exc())
 
     driver.quit()
 
@@ -71,10 +83,12 @@ def main():
     pngpath_list = glob.glob(savepath + '/*.png')  # get filelist of png files
     for pngpath in pngpath_list:
         basename = os.path.basename(pngpath)  # get filename
-        save_filepath = savepath + basename[:-4] + '.jpg'  # determin save filename
+        # determin save filename
+        save_filepath = savepath + basename[:-4] + '.jpg'
         img = Image.open(pngpath)
         img = img.convert('RGB')  # convert PNG to jpeg
-        img.save(save_filepath, "JPEG", quality=80)     # jpeg parameter settings
+        # jpeg parameter settings
+        img.save(save_filepath, "JPEG", quality=80)
         if inifile['func']['is_del']:
             os.remove(pngpath)              # save as jpeg
 
