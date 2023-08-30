@@ -2,6 +2,7 @@ import os
 import time
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import TimeoutException
 import traceback
 import configparser
@@ -10,7 +11,7 @@ import glob
 from PIL import Image
 import logging
 from selenium.webdriver.remote.remote_connection import LOGGER
-
+import requests
 
 def main():
 
@@ -25,7 +26,11 @@ def main():
     os.makedirs(savepath, exist_ok=True)
 
     # logging setup
-    logging.basicConfig(filename=savepath + 'debug.log', level=logging.DEBUG)
+    logging.basicConfig(filename=savepath + 'debug.log', level=logging.ERROR)
+
+    url = 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE'
+
+    response = requests.get(url)
 
     # Webdriver options
     options = webdriver.ChromeOptions()
@@ -44,22 +49,32 @@ def main():
     options.add_argument('--ignore-ssl-errors')
     prefs = {"profile.default_content_setting_values.notifications": 2}
 
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    try:
 
+        driver_path = ChromeDriverManager().install()
+
+    except ValueError:
+
+        # ValueErrorが発生した場合、バージョンを指定してインストール
+        driver_path = ChromeDriverManager(version=response.text).install()
+
+    service = Service(executable_path=driver_path)
+    driver = webdriver.Chrome(service=service, options=options)
+    
     with open('pages.txt') as f:
         pages = f.readlines()
 
     for page in pages:
 
         # adding set_page_load_timeout
-        driver.set_page_load_timeout(20)
+        driver.set_page_load_timeout(30)
 
         print(page)
 
         try:
 
             driver.get(page)
-            time.sleep(3)
+            time.sleep(30)
             # w = driver.execute_script("return document.body.scrollWidth;")
             h = driver.execute_script("return document.body.scrollHeight;")
             driver.set_window_size(1920, h)
