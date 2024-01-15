@@ -1,7 +1,7 @@
 import os
 import time
 from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
+#from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import TimeoutException
 import traceback
@@ -49,17 +49,20 @@ def main():
     options.add_argument('--ignore-ssl-errors')
     prefs = {"profile.default_content_setting_values.notifications": 2}
 
-    try:
+    #try:
 
-        driver_path = ChromeDriverManager().install()
+    #    driver_path = ChromeDriverManager().install()
 
-    except ValueError:
+    #except ValueError:
 
         # ValueErrorが発生した場合、バージョンを指定してインストール
-        driver_path = ChromeDriverManager(version=response.text).install()
+    #    driver_path = ChromeDriverManager(version=response.text).install()
 
-    service = Service(executable_path=driver_path)
-    driver = webdriver.Chrome(service=service, options=options)
+   # service = Service(executable_path=driver_path)
+    #driver = webdriver.Chrome(service=service, options=options)
+    
+    driver = webdriver.Chrome(options=options)
+
     
     with open('pages.txt') as f:
         pages = f.readlines()
