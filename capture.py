@@ -1,7 +1,6 @@
 import os
 import time
 from selenium import webdriver
-#from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import TimeoutException
 import traceback
@@ -9,7 +8,7 @@ import configparser
 from datetime import datetime as dt
 import glob
 from PIL import Image
-import logging
+#import logging
 from selenium.webdriver.remote.remote_connection import LOGGER
 import requests
 
@@ -26,7 +25,7 @@ def main():
     os.makedirs(savepath, exist_ok=True)
 
     # logging setup
-    logging.basicConfig(filename=savepath + 'debug.log', level=logging.ERROR)
+    #logging.basicConfig(filename=savepath + 'debug.log', level=logging.ERROR)
 
     url = 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE'
 
@@ -35,7 +34,7 @@ def main():
     # Webdriver options
     options = webdriver.ChromeOptions()
 
-    # headless
+    # headless setting
     options.add_argument("start-maximized")
     options.add_argument("enable-automation")
     options.add_argument("--headless")
@@ -47,23 +46,12 @@ def main():
     options.add_argument("--disable-gpu")
     options.add_argument('--ignore-certificate-errors')
     options.add_argument('--ignore-ssl-errors')
+    # solved 'third-party cookie will be blocked. learn more in the issues tab'
+    options.add_argument('log-level=3')
     prefs = {"profile.default_content_setting_values.notifications": 2}
 
-    #try:
-
-    #    driver_path = ChromeDriverManager().install()
-
-    #except ValueError:
-
-        # ValueErrorが発生した場合、バージョンを指定してインストール
-    #    driver_path = ChromeDriverManager(version=response.text).install()
-
-   # service = Service(executable_path=driver_path)
-    #driver = webdriver.Chrome(service=service, options=options)
-    
     driver = webdriver.Chrome(options=options)
 
-    
     with open('pages.txt') as f:
         pages = f.readlines()
 
